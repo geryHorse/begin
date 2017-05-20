@@ -5,15 +5,32 @@ function sleep(millSeconds) {
     while (new Date().getTime() < startTime + millSeconds);
 }
 
-function start() {
+const exec = require('child_process').exec;
+
+function start(response) {
     console.log('Request handler "start" was called');    
-    sleep(5000);
-    return 'Hello Start';
+    
+    exec('find /',
+        {timeout: '5000', maxBuffer: 20000*1024},
+     function(error, stdout, stderr) {
+        response.writeHead(200, {'Content-Type': 'text/plain'});
+        // console.log(stdout)
+        response.write(stdout);
+        response.end();
+    });
+
+    // sleep(5000);
+    // return 'Hello Start';
 }
 
-function upload() {
+function upload(response) {
     console.log('Request handler "upload" was called');
-    return 'Hello Upload';
+
+    response.writeHead(200, {'Content-Type': 'text/plain'});
+    response.write('Hello Upload');
+    response.end();
+
+    // return 'Hello Upload';
 }
 
 exports.start = start;

@@ -9,12 +9,10 @@ function start(route, handle) {
         var pathname = url.parse(request.url).pathname;
         if (pathname !== '/favicon.ico') {
             console.log('Request for ' + pathname + ' reveived');
-            response.writeHead(200, {'Content-Type': 'text/plain'});
-            var content = route(handle, pathname);
-            response.write(content);
-        }
-        
-        response.end();
+            route(handle, pathname, response);
+        } else {
+            response.end();
+        }        
     }
     http.createServer(onRequest).listen(8888);
     console.log('Server has started');
